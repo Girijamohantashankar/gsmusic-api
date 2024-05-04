@@ -17,9 +17,23 @@ try {
   console.error('Error reading songs from file:', err);
 }
 
+// app.get('/api/songs', (req, res) => {
+//   res.json(songs);
+// });
 app.get('/api/songs', (req, res) => {
-  res.json(songs);
+  // Shuffle the songs array
+  const shuffledSongs = shuffleArray(songs);
+  res.json(shuffledSongs);
 });
+// Function to shuffle an array
+const shuffleArray = (array) => {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+};
 
 app.post('/api/songs', upload.single('songFile'), (req, res) => {
   const { title, image, artist, categories } = req.body;
